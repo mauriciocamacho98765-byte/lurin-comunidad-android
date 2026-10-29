@@ -56,6 +56,11 @@ jobs:
           python3 tests/test_two_phones.py
           python3 tests/test_native_guest_v07.py
           python3 tests/test_identity_no_email_v08.py
+      - name: Probar entradas reales sin correo en Supabase exclusivo
+        env:
+          LURIN_SUPABASE_URL: ${{ vars.LURIN_SUPABASE_URL }}
+          LURIN_SUPABASE_PUBLISHABLE_KEY: ${{ vars.LURIN_SUPABASE_PUBLISHABLE_KEY }}
+        run: python3 tests/smoke_identity_real_v08.py
       - name: Compilar APK debug
         env:
           LURIN_SUPABASE_URL: ${{ vars.LURIN_SUPABASE_URL }}
