@@ -137,3 +137,11 @@ Se reemplazó el logo descolorido por el archivo original **333.png** aportado p
 - No hay APK descargable hasta que se ejecute un build verificado en GitHub Actions o Android Studio con SDK.
 
 **Nota de seguridad:** en una aplicación abierta a personas reales se necesita moderación, bloqueo de abuso y pruebas de registro con emails reales antes de afirmar que está lista para lanzarse. Los canjes de restaurantes son solo demostración.
+
+
+## Beta 0.8: acceso sin correo
+- **Visitante:** se crea una cuenta real de Supabase Auth en el servidor Lurín, sin pedir email. No depende de habilitar `Anonymous Sign-Ins`.
+- **Usuario y contraseña:** registro e inicio de sesión sin correo. El proveedor Supabase Auth guarda el hash de la contraseña; el alias interno se deriva por HMAC exclusivamente en Edge Functions.
+- **Proteger mi cuenta:** el visitante puede asignar un usuario y contraseña desde Perfil y conservar su identidad, publicaciones y puntos.
+- **Límite:** sin correo todavía no hay restablecimiento automático de contraseña. Quien se registre debe conservarla; si el visitante borra datos sin protegerse puede perder acceso.
+- El servicio de identidad tiene cuotas por acción y clave administrativa exclusivamente en el servidor. La APK pública usa solo la clave publicable y RLS.

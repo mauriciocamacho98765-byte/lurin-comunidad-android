@@ -3,7 +3,7 @@ from pathlib import Path
 from PIL import Image
 import io,base64,json,re
 p=Path(__file__).resolve().parents[1]
-assert "versionName '0.7.0-beta'" in (p/'app/build.gradle').read_text()
+assert "versionName '0.8.0-beta'" in (p/'app/build.gradle').read_text()
 html=(p/'web/base.html').read_text()
 m=re.search(r'const ASSETS=(\{.*?\});const IMG=',html)
 assert m
