@@ -3,9 +3,17 @@
 Crea cuentas QA sin perfil público; solo se ejecuta en GitHub Actions sobre Lurín.
 """
 import os,json,secrets,urllib.request,urllib.error
-url=os.environ['LURIN_SUPABASE_URL'].rstrip('/')
-key=os.environ['LURIN_SUPABASE_PUBLISHABLE_KEY']
-assert url=='https://tjvftleczansqadojxnd.supabase.co'
+from pathlib import Path
+# La misma configuración pública que utiliza la APK. GitHub Actions no necesita
+# variables duplicadas para las pruebas reales de autenticación.
+config_path=Path(__file__).resolve().parents[1]/'config/public-backend.json'
+config=json.loads(config_path.read_text(encoding='utf-8'))
+url=(os.environ.get('LURIN_SUPABASE_URL') or config.get('supabaseUrl') or '').rstrip('/')
+key=os.environ.get('LURIN_SUPABASE_PUBLISHABLE_KEY') or config.get('publishableKey') or ''
+if url!='https://tjvftleczansqadojxnd.supabase.co':
+    raise SystemExit('Smoke test: se rechazó backend que no pertenece a Lurín')
+if not key.startswith('sb_publishable_'):
+    raise SystemExit('Smoke test: falta la clave pública de Lurín')
 def req(path,payload=None,token=None):
     body=json.dumps(payload).encode() if payload is not None else None
     h={'apikey':key,'Content-Type':'application/json'}
