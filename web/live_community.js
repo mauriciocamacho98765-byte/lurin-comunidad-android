@@ -20,7 +20,7 @@
  const sessionKey='lurin.community.session.v1';
  let session=null;
  let feedView='all',networkOnline=true,events=[],myEventIds=new Set();
- let authMode='login', signupDisplayName='', authNotice='', authBusy=false, busy=false;
+ let authMode='login', signupDisplayName='', signupUsername='', authNotice='', authBusy=false, busy=false;
  let feed=[], comments=[], chat=[], profiles=new Map(), roomsBySlug=new Map(), likedIds=new Set(), followingIds=new Set(),
      activeChallenges=[], leaderboard=[], mediaFile=null, photoPreview='', lastFeedSignature='', timer=null;
  const localEx=()=>window.escapeH?window.escapeH:escapeH;
@@ -49,7 +49,7 @@
    if(!session?.refresh_token) throw Error('Tu sesión terminó. Ingresa nuevamente.');
    const res=await fetch(url+'/auth/v1/token?grant_type=refresh_token',{method:'POST',headers:{apikey:key,'Content-Type':'application/json'},body:JSON.stringify({refresh_token:session.refresh_token})});
    const value=await res.json();if(!res.ok) {setSession(null);throw Error('Tu sesión venció. Ingresa nuevamente.');}
-   setSession(value);return session.access_token;
+   setSession({...value,lurin_account_type:session?.lurin_account_type,lurin_username:session?.lurin_username});return session.access_token;
  }
  async function jwt(){if(!session?.access_token)throw Error('Inicia sesión para participar.');if(Date.now()/1000 > (session.expires_at||0)-80)await refreshAuth();return session.access_token;}
  async function request(path,{method='GET',body=null,auth=true,headers={}}={}){
@@ -85,7 +85,7 @@
    const email=String(session.user.email||'');
    const first=(signupDisplayName||session.user.user_metadata?.display_name||email.split('@')[0]||'Visitante').slice(0,65);
    const safeName=first.trim().length>=2?first.trim():'Visitante de Lurín';
-   const base=String(email.split('@')[0]||'lurin').toLowerCase().replace(/[^a-z0-9_]/g,'').slice(0,17)||'lurin';
+   const base=String(signupUsername||email.split('@')[0]||'lurin').toLowerCase().replace(/[^a-z0-9_]/g,'').slice(0,17)||'lurin';
    for(let i=0;i<4;i++){
      const handle=(base+'_'+Math.random().toString(36).slice(2,9)).slice(0,30);
      try{const records=await post('lurin_profiles',{id:my,display_name:safeName,handle});
@@ -298,6 +298,7 @@
        else render();break;
      }
      case 'logout':{
+       if(session?.user?.app_metadata?.lurin_identity_type==='guest'&&!confirm('Tu cuenta de visitante no tiene usuario ni contraseña. Si cierras sesión, podrías perder tus historias y raíces. ¿Salir de todas formas?'))break;
        const token=session?.access_token;setSession(null);feed=[];comments=[];chat=[];profiles.clear();state.userPosts=[];state.points=0;
        if(token){fetch(url+'/auth/v1/logout',{method:'POST',headers:{apikey:key,Authorization:'Bearer '+token}}).catch(()=>{});}
        state.page='welcome';render();break;
