@@ -43,6 +43,7 @@ jobs:
           python3 tests/test_security_contract.py
           python3 tests/test_logo_v04.py
           python3 tests/test_two_phones.py
+          python3 tests/test_native_guest_v07.py
       - name: Verificar proyecto Android y compilar APK
         env:
           LURIN_SUPABASE_URL: ${{ vars.LURIN_SUPABASE_URL }}

@@ -54,6 +54,7 @@ jobs:
           python3 tests/test_security_contract.py
           python3 tests/test_logo_v04.py
           python3 tests/test_two_phones.py
+          python3 tests/test_native_guest_v07.py
       - name: Compilar APK debug
         env:
           LURIN_SUPABASE_URL: ${{ vars.LURIN_SUPABASE_URL }}
@@ -64,7 +65,7 @@ jobs:
       - name: Publicar APK beta descargable (artefacto temporal)
         uses: actions/upload-artifact@v4
         with:
-          name: Lurin-Comunidad-0.6.0-beta-Online-APK
+          name: Lurin-Comunidad-0.7.0-beta-Online-APK
           path: |
             app/build/outputs/apk/debug/app-debug.apk
             SHA256SUMS.txt

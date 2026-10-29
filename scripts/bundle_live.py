@@ -6,7 +6,14 @@ import json, os, re, sys
 from pathlib import Path
 root=Path(__file__).resolve().parents[1]
 source=(root/'web/base.html').read_text(encoding='utf-8')
+# Immersive Android fixes without modifying the historical design source.
+source=source.replace('</style>',(root/'web/native_v07.css').read_text(encoding='utf-8')+'</style>',1)
+source=source.replace('Prototipo educativo · Comunidad y beneficios simulados','Comunidad de Lurín · Conecta con tus raíces')
 client=(root/'web/live_community.js').read_text(encoding='utf-8')
+upgrade=(root/'web/upgrade_v07.js').read_text(encoding='utf-8')
+ending=' void initialize();\n})();'
+assert ending in client, 'El cliente compartido debe terminar en initialize()'
+client=client.replace(ending,'\n'+upgrade+'\n'+ending,1)
 # Public mobile keys are explicitly intended for client use; RLS enforces authorization.
 # The isolated project is tracked here so GitHub Actions can build without manual secrets.
 configfile=root/'config/public-backend.json'

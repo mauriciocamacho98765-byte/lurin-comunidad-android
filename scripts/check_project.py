@@ -17,7 +17,7 @@ assert 'lurinAndroidBack' in web and 'WebViewAssetLoader' in java
 assert 'onRenderProcessGone' in java, 'No recovery of WebView renderer crash'
 assert 'WindowInsets.Type.systemBars()' in java, 'Missing Android 15 layout fix'
 assert 'pe.lurin.comunidad' in gradle and 'pe.lurin.comunidad' in java
-assert "versionName '0.6.0-beta'" in gradle
+assert "versionName '0.7.0-beta'" in gradle
 assert 'android:allowBackup="false"' in manifest
 assert 'usesCleartextTraffic="false"' in manifest
 assert 'android:exported="true"' in manifest

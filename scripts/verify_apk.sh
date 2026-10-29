@@ -9,7 +9,7 @@ test -x "${BUILD_TOOLS}/aapt" || { echo 'No existe aapt (SDK 35.0.0)'; exit 1; }
 test -x "${BUILD_TOOLS}/apksigner" || { echo 'No existe apksigner'; exit 1; }
 INFO="$("${BUILD_TOOLS}/aapt" dump badging "$apk")"
 printf '%s\n' "$INFO" | grep -E "^package: name='pe\.lurin\.comunidad'" >/dev/null || { echo 'packageId incorrecto'; exit 1; }
-printf '%s\n' "$INFO" | grep "versionName='0.6.0-beta'" >/dev/null || { echo 'versionName incorrecto'; exit 1; }
+printf '%s\n' "$INFO" | grep "versionName='0.7.0-beta'" >/dev/null || { echo 'versionName incorrecto'; exit 1; }
 printf '%s\n' "$INFO" | grep "launchable-activity: name='pe.lurin.comunidad.MainActivity'" >/dev/null || { echo 'MainActivity ausente'; exit 1; }
 "${BUILD_TOOLS}/apksigner" verify --verbose "$apk"
 sha256sum "$apk" > SHA256SUMS.txt

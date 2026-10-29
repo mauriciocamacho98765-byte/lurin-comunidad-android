@@ -108,6 +108,7 @@ with sync_playwright() as p:
       contexts.append(context);screens.append((page,errors))
   (a,errsA),(b,errsB)=screens
   for pg,email in [(a,'ana@lurin.test'),(b,'luis@lurin.test')]:
+      pg.evaluate("go('login')")
       pg.locator('#liveEmail').fill(email)
       pg.locator('#livePassword').fill('password123')
       pg.locator('[data-live="auth"]').click()

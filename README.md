@@ -1,4 +1,22 @@
-# Lurín Comunidad — Android beta 0.6.0 · Comunidad real, personas seguidas y eventos
+
+## Beta 0.7 · Interfaz Android corregida (29 octubre 2026)
+
+- Se elimina el marco de teléfono de las páginas del APK: el sistema Android es el contenedor, no hay segundo teléfono dentro de BlueStacks.
+- La bienvenida conserva el logo a color sobre fondo crema, sin tarjeta blanca detrás.
+- El acceso de visitante permite elegir apodo **sin correo**, si se activa **Anonymous Sign-Ins** en Supabase Authentication → Providers. Esa identidad se guarda solo en el dispositivo: si se borran datos o se cambia de dispositivo puede perderse.
+- Se muestran tres historias y comentarios **de muestra claramente etiquetados** solo cuando aún no existen publicaciones compartidas; no se introducen perfiles ni publicaciones ficticias en la base real.
+- Retos de la comunidad con descripción, foto y envío a moderación; los puntos indicados se asignan **solo tras revisión y aprobación**, todavía sin circuito comercial de canjes.
+- Cuatro propuestas visuales de recompensas: gastronomía, caballos de paso, artesanía y rutas; incluyen puntos y zonas referenciales. **No hay cupones reales, comercios aliados confirmados ni beneficios canjeables**.
+- La comunidad continúa guardando posts, comentarios, seguidores y mensajes en Supabase dedicado, separado de NEXUS.
+- Verificaciones locales: suite de 26 rutas, dos navegadores con un backend simulado y nueva prueba de visualización Android v07. Sin prueba de instalación física todavía.
+
+### Requisito imprescindible para participar sin correo
+
+En el proyecto `Lurin Comunidad Publica` (`tjvftleczansqadojxnd`) debe activarse **Anonymous Sign-Ins** en Authentication → Providers (Supabase). El conector del proyecto no permite cambiar este ajuste directamente. La aplicación dará un mensaje si está desactivado; no debe anunciarse como acceso anónimo activo hasta comprobarlo contra Supabase real.
+
+**Nota:** los precios o puntajes son referencias de diseño; la beta no cobra ni emite entradas reales.
+
+# Lurín Comunidad — Android beta 0.7.0 · Comunidad Android sin marco, visitante y propuestas recreativas
 
 **Proyecto público independiente** del traductor, NEXUS y cualquier repositorio privado. Aplicación recreativa para Android con la identidad visual original del prototipo de Marca Lurín: azul `#3A477E`, verde oliva `#A49E27` y dorado `#AB7B1D`. Mantiene las 26 pantallas base del prototipo, sin transmitir las fotos ni archivos privados de otros proyectos.
 
@@ -17,7 +35,7 @@
 
 Proyecto Supabase `Lurin Comunidad Publica` (`tjvftleczansqadojxnd`), **ACTIVE_HEALTHY**, completamente separado del backend de NEXUS. Se verificó que mantiene 18 tablas de Lurín con RLS, 3 salas comunitarias y cero advertencias de seguridad del analizador. Todavía tiene **0 usuarios, 0 publicaciones y 0 eventos visibles**. El frontend está conectado por URL y clave publicable; su funcionamiento **con cuentas y dispositivos reales** sigue sin verificarse.
 
-No se ha generado ni probado una APK instalable: este entorno no dispone de SDK Android y no puede descargar Gradle. Repositorio creado: **mauriciocamacho98765-byte/lurin-comunidad-android**. Para compilar, utiliza el workflow en el repositorio y ejecuta el workflow `.github/workflows/build-apk.yml` o usa Android Studio. No añadir secretos ni materiales de NEXUS al repositorio.
+No se ha generado ni probado una APK instalable: este entorno no dispone de SDK Android y no puede descargar Gradle. Para compilar, crea un repositorio **público nuevo** y ejecuta el workflow `.github/workflows/build-apk.yml` o usa Android Studio. No añadir secretos ni materiales de NEXUS al repositorio.
 
 La API de Supabase no requiere OpenAI API Key; no se ha creado ninguna clave de OpenAI para esta aplicación.
 
@@ -33,7 +51,7 @@ La API de Supabase no requiere OpenAI API Key; no se ha creado ninguna clave de 
 | Puntos contra base de datos, ranking y límites diarios | Implementados en migración; sin pruebas de integración sobre DB real |
 | RLS/Storage/reporte y controles antiabuso básicos | Desplegados en Supabase exclusivo, sin advertencias de seguridad detectadas |
 | Cupones y premios de restaurantes | **Desactivados**, requieren comercios reales, validación y antifraude |
-| Repositorio público GitHub | Disponible; APK y pruebas en dos celulares pendientes |
+| Repositorio público GitHub, APK firmada y pruebas en dos celulares | **PENDIENTES** |
 
 El Supabase exclusivo `Lurin Comunidad Publica` ya fue creado. La comunidad real requiere aplicar migraciones, activar Auth y validar el acceso desde dos Android físicos antes de anunciar disponibilidad pública.
 
