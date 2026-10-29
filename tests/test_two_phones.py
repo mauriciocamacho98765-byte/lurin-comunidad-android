@@ -124,7 +124,7 @@ with sync_playwright() as p:
   assert len(DB['lurin_posts'])==1
   # Verificamos sincronización automática, sin pulsar Actualizar.
   b.wait_for_function("document.querySelector('#page').innerText.includes('El camino del valle que nos une')",timeout=18000)
-  b.screenshot(path='/mnt/data/LURIN_BETA_V03_COMPARTIDO_PRUEBA.png',full_page=False)
+  b.screenshot(path='test-artifacts/LURIN_BETA_V03_COMPARTIDO_PRUEBA.png',full_page=False)
   print('PASS: Ana publica -> Luis ve la historia en otro dispositivo')
 
   b.locator('[data-live="comments"]').first.click()
@@ -154,7 +154,7 @@ with sync_playwright() as p:
   assert 'El camino del valle que nos une' in b.locator('#page').inner_text()
   b.locator('[data-post-id]').first.scroll_into_view_if_needed()
   b.wait_for_timeout(1200)
-  b.screenshot(path='/mnt/data/LURIN_BETA_V06_SIGUIENDO.png',full_page=False)
+  b.screenshot(path='test-artifacts/LURIN_BETA_V06_SIGUIENDO.png',full_page=False)
   b.locator('[data-live="follow"]').first.click()
   b.wait_for_function("document.querySelector('#page').innerText.includes('Todavía no sigues publicaciones')",timeout=12000)
   assert len(DB['lurin_follows'])==0
@@ -169,7 +169,7 @@ with sync_playwright() as p:
   b.wait_for_function("document.querySelector('[data-live=toggleEvent]').innerText.includes('Cancelar asistencia')",timeout=12000)
   assert len(DB['lurin_event_attendees'])==1
   b.wait_for_timeout(1100)
-  b.screenshot(path='/mnt/data/LURIN_BETA_V06_EVENTOS.png',full_page=False)
+  b.screenshot(path='test-artifacts/LURIN_BETA_V06_EVENTOS.png',full_page=False)
   b.locator('[data-live="toggleEvent"]').click()
   b.wait_for_function("document.querySelector('[data-live=toggleEvent]').innerText.includes('Me apunto')",timeout=12000)
   assert len(DB['lurin_event_attendees'])==0
