@@ -23,7 +23,7 @@ assert 'background:white;border-radius:24px;padding:14px 32px' not in html, 'Ori
 live=(p/'web/live_community.js').read_text()
 assert 'welcome-logo-no-card' in live, 'Online login still uses white logo card'
 assert 'margin:5px 0 14px;background:white' not in live, 'Online login logo box still white'
-assert 'versionName=\'0.7.0-beta\'' in (p/'scripts/verify_apk.sh').read_text(), 'Stale APK verifier version'
+assert 'versionName=\'0.8.0-beta\'' in (p/'scripts/verify_apk.sh').read_text(), 'Stale APK verifier version'
 print('PASS: white rounded background removed in local welcome and online login')
 
 backend=json.loads((p/'config/public-backend.json').read_text())
