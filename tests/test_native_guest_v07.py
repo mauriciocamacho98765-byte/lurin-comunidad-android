@@ -14,7 +14,7 @@ assert p.returncode==0,p.stderr
 html=output.read_text()
 url='https://lurin-test.supabase.co'
 uid='11111111-1111-4111-8111-111111111111'
-user={'id':uid,'email':'','is_anonymous':True,'user_metadata':{'display_name':'Visitante de prueba'}}
+user={'id':uid,'email':'v00000000000000000000000000000000@usuarios.lurin.invalid','app_metadata':{'lurin_identity_type':'guest'},'user_metadata':{'display_name':'Visitante de prueba'}}
 profile=[];submits=[]
 challenges=[{'id':str(uuid.uuid4()),'title':title,'description':'Actividad comunitaria de prueba, fotos y relatos reales.', 'reward_points':points,'active':True,'starts_at':'2026-10-29T05:00:00Z','ends_at':'2027-02-28T23:59:59Z'} for title,points in [('Postales de nuestras raíces',50),('Relatos que nos unen',70),('Sabores con historia',45)]]
 def handler(route):
@@ -24,7 +24,7 @@ def handler(route):
     try: body=json.loads(req.post_data or '{}')
     except Exception:body={}
     result=[]
-    if path=='/auth/v1/signup': result={'user':user,'access_token':'test-session-guest','refresh_token':'guest-refresh','expires_in':3600}
+    if path=='/functions/v1/lurin-identity' and body.get('action')=='guest': result={'user':user,'access_token':'test-session-guest','refresh_token':'guest-refresh','expires_in':3600,'lurin_account_type':'guest'}
     elif path=='/auth/v1/token' and qp.get('grant_type')==['refresh_token']:result={'user':user,'access_token':'test-session-guest','refresh_token':'guest-refresh','expires_in':3600}
     elif path.startswith('/rest/v1/rpc/'):
         result=0 if path.endswith('lurin_my_points') else []
