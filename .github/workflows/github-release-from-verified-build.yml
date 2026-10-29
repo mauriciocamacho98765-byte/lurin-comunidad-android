@@ -1,0 +1,44 @@
+name: "Lurín Comunidad - publicar APK beta descargable"
+
+on:
+  workflow_run:
+    workflows:
+      - "Lurín Comunidad - compilar APK Android beta"
+    types: [completed]
+
+permissions:
+  contents: write
+  actions: read
+
+jobs:
+  github-release:
+    name: "Publicar APK de prueba verificada"
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: "Descargar APK verificada de GitHub Actions"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SOURCE_RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          set -euo pipefail
+          gh run download "$SOURCE_RUN_ID" --repo "$GITHUB_REPOSITORY" --name "Lurin-Comunidad-0.6.0-beta-Online-APK" --dir dist
+          APK=$(find dist -type f -name '*.apk' | head -n 1)
+          test -n "$APK"
+          test -s "$APK"
+          cp "$APK" "Lurin-Comunidad-0.6.0-beta.apk"
+          sha256sum "Lurin-Comunidad-0.6.0-beta.apk" > SHA256SUMS.txt
+      - name: "Publicar como beta pública (no Play Store)"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: v0.6.0-beta
+        run: |
+          set -euo pipefail
+          if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" "Lurin-Comunidad-0.6.0-beta.apk" SHA256SUMS.txt --clobber --repo "$GITHUB_REPOSITORY"
+          else
+            gh release create "$RELEASE_TAG" "Lurin-Comunidad-0.6.0-beta.apk" SHA256SUMS.txt --repo "$GITHUB_REPOSITORY" --target "${{ github.event.workflow_run.head_sha }}" --title "Lurín Comunidad 0.6.0 - beta Android" --notes "APK debug para pruebas de comunidad de Lurín; no es una versión de Google Play. Las pruebas automatizadas con usuarios simulados pasaron; faltan validación de correo y pruebas en dos Android físicos con Supabase real. Beneficios y canjes comerciales desactivados." --prerelease --latest=false
+          fi
