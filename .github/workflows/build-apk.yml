@@ -72,3 +72,16 @@ jobs:
             SHA256SUMS.txt
           if-no-files-found: error
           retention-days: 30
+
+      - name: Publicar APK 0.8 Beta en GitHub Releases
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          cp app/build/outputs/apk/debug/app-debug.apk Lurin-Comunidad-v0.8.0-beta.apk
+          sha256sum Lurin-Comunidad-v0.8.0-beta.apk > LURIN-V08-SHA256SUMS.txt
+          if gh release view v0.8.0-beta >/dev/null 2>&1; then
+            gh release upload v0.8.0-beta Lurin-Comunidad-v0.8.0-beta.apk LURIN-V08-SHA256SUMS.txt --clobber
+          else
+            gh release create v0.8.0-beta Lurin-Comunidad-v0.8.0-beta.apk LURIN-V08-SHA256SUMS.txt --title "Lurín Comunidad 0.8 Beta - Acceso sin correo" --notes "APK de prueba con firma de depuración. Invitado o usuario y contraseña sin correo. Recompensas comerciales aún no canjeables." --prerelease
+          fi
