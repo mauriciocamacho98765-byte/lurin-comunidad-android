@@ -10,7 +10,7 @@ source=(root/'web/base.html').read_text(encoding='utf-8')
 source=source.replace('</style>',(root/'web/native_v07.css').read_text(encoding='utf-8')+'</style>',1)
 source=source.replace('Prototipo educativo · Comunidad y beneficios simulados','Comunidad de Lurín · Conecta con tus raíces')
 client=(root/'web/live_community.js').read_text(encoding='utf-8')
-upgrade=(root/'web/upgrade_v07.js').read_text(encoding='utf-8')
+upgrade=(root/'web/upgrade_v07.js').read_text(encoding='utf-8')+'\n'+(root/'web/upgrade_v08.js').read_text(encoding='utf-8')
 ending=' void initialize();\n})();'
 assert ending in client, 'El cliente compartido debe terminar en initialize()'
 client=client.replace(ending,'\n'+upgrade+'\n'+ending,1)
