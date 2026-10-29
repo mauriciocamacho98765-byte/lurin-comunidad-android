@@ -337,7 +337,7 @@
        const body=maxText(document.getElementById('liveComment')?.value,600);
        if(body.length<2||!state.postId)throw Error('Escribe un comentario válido.');
        busy=true;await post('lurin_comments',{post_id:state.postId,author_id:sessionUser(),body});busy=false;
-       await Promise.all([loadComments(state.postId),loadFeed({quiet:true}),refreshPoints()]);announce('Comentario publicado para todos.');break;
+       await Promise.all([loadComments(state.postId),loadFeed({quiet:true}),refreshPoints()]);if(state.page==='comments')render();announce('Comentario publicado para todos.');break;
      }
      case 'like':{
        const already=likedIds.has(id);
