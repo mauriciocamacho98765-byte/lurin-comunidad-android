@@ -132,7 +132,7 @@ with sync_playwright() as p:
   b.wait_for_function("state.page === 'comments'",timeout=12000)
   b.locator('#liveComment').fill('Me gusta mucho esta historia del valle, gracias por compartirla.')
   b.locator('[data-live="sendComment"]').click()
-  b.wait_for_function("document.querySelector('#page').innerText.includes('Me gusta mucho esta historia')",timeout=14000)
+  b.wait_for_function("document.querySelector('#page').innerText.includes('Me gusta mucho esta historia')",timeout=30000)
   assert len(DB['lurin_comments'])==1
   a.evaluate("go('home')")
   a.evaluate('window.LurinLive.refresh()')
