@@ -11,7 +11,7 @@ assets=json.loads(m.group(1))
 for name in ('lurin_logo_oficial.png','lurin_marca_simbolo.png'):
     im=Image.open(io.BytesIO(base64.b64decode(assets[name].split('base64,')[1]))).convert('RGBA')
     al=im.getchannel('A')
-    colors=[x for x in im.get_flattened_data() if x[3]>200 and max(x[:3])-min(x[:3])>20]
+    colors=[x for x in im.getdata() if x[3]>200 and max(x[:3])-min(x[:3])>20]
     assert len(colors)>4000,(name,len(colors))
     print('PASS:',name,'opaque colored pixels:',len(colors))
 icon=Image.open(p/'app/src/main/res/drawable/ic_launcher_foreground.png')
