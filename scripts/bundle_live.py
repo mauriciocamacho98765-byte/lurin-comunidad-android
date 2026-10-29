@@ -32,5 +32,6 @@ source=source.rstrip()
 assert source.endswith('</html>'), 'web/base.html debe cerrar el elemento html'
 output=source[:-7]+injection+'</html>'
 path=Path(os.environ.get('LURIN_BUNDLE_OUTPUT') or root/'app/src/main/assets/index.html')
+path.parent.mkdir(parents=True, exist_ok=True)
 path.write_text(output,encoding='utf-8')
 print('Lurín Comunidad bundle:',path.stat().st_size,'bytes; modo=', 'ONLINE' if is_valid else 'DEMO SIN BACKEND')
