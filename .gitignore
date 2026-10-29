@@ -1,0 +1,24 @@
+.gradle/
+.gradle-cache/
+.idea/
+*.iml
+local.properties
+**/build/
+/captures/
+*.jks
+*.keystore
+*.apk
+*.aab
+.DS_Store
+
+# Claves y credenciales - nunca se publican
+.env
+.env.*
+!.env.example
+*service-account*.json
+*google-services.json
+**/secrets.properties
+*.p12
+*.pem
+*.asc
+**/outputs/

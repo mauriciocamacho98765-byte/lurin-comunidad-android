@@ -1,0 +1,72 @@
+name: Lurín Comunidad - compilar APK Android beta
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: lurin-apk-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  apk-debug:
+    name: Beta comunitaria online · Android APK
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - name: Obtener el proyecto público de Lurín
+        uses: actions/checkout@v4
+      - name: Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - name: SDK Android
+        uses: android-actions/setup-android@v3
+      - name: API 36 y herramientas para validar el APK
+        run: |
+          sdkmanager --install 'platforms;android-36' 'build-tools;35.0.0' 'platform-tools'
+      - name: Gradle 8.13
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.13'
+      - name: Empaquetar cliente online y validar backend independiente
+        env:
+          LURIN_SUPABASE_URL: ${{ vars.LURIN_SUPABASE_URL }}
+          LURIN_SUPABASE_PUBLISHABLE_KEY: ${{ vars.LURIN_SUPABASE_PUBLISHABLE_KEY }}
+        run: python3 scripts/bundle_live.py --require-online
+      - name: QA estático y seguridad
+        run: python3 scripts/check_project.py
+      - name: Python y navegador para pruebas de dos cuentas
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Instalar herramientas QA
+        run: |
+          python -m pip install --disable-pip-version-check playwright==1.57.0 pillow==12.0.0
+          python -m playwright install --with-deps chromium
+      - name: QA realista: dos teléfonos con backend simulado
+        run: |
+          python3 tests/test_security_contract.py
+          python3 tests/test_logo_v04.py
+          python3 tests/test_two_phones.py
+      - name: Compilar APK debug
+        env:
+          LURIN_SUPABASE_URL: ${{ vars.LURIN_SUPABASE_URL }}
+        run: |
+          gradle :app:assembleDebug --no-daemon --stacktrace
+      - name: Verificar paquete Android y firma, calcular SHA256
+        run: bash scripts/verify_apk.sh app/build/outputs/apk/debug/app-debug.apk
+      - name: Publicar APK beta descargable (artefacto temporal)
+        uses: actions/upload-artifact@v4
+        with:
+          name: Lurin-Comunidad-0.6.0-beta-Online-APK
+          path: |
+            app/build/outputs/apk/debug/app-debug.apk
+            SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 30

@@ -1,0 +1,36 @@
+# Verificaciones de la beta Lurín
+
+- OK / welcome
+- OK / role
+- OK / home
+- OK / post
+- OK / comments
+- OK / compose
+- OK / published
+- OK / discover
+- OK / place
+- OK / stories
+- OK / challenges
+- OK / challengeDetail
+- OK / submitChallenge
+- OK / challengeDone
+- OK / ranking
+- OK / wallet
+- OK / rewards
+- OK / reward
+- OK / voucher
+- OK / events
+- OK / event
+- OK / groups
+- OK / chat
+- OK / profile
+- OK / settings
+- OK / notifications
+- OK / publicación y puntos: 420 -> 460
+- OK / comentarios
+- OK / retos y puntos
+- OK / chat local
+- OK / navegación Android atrás
+- WebView Android: código preparado, no compilado en este entorno (SDK de Android ausente)
+- Repositorio público: pendiente de crearlo y subir los archivos
+- Supabase: backend independiente pendiente de aprobación y configuración

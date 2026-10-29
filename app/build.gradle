@@ -1,0 +1,47 @@
+plugins {
+    id 'com.android.application'
+}
+
+// The public Supabase URL and publishable key belong ONLY to Lurín (no private backend).
+def publicFile = rootProject.file('config/public-backend.json')
+def publicSettings = publicFile.exists() ? new groovy.json.JsonSlurper().parse(publicFile) : [:]
+def publicSupabaseHost = (publicSettings.supabaseUrl ?: '').toString().replaceFirst('^https://', '')
+def lurinBackendHost = (project.findProperty('LURIN_SUPABASE_HOST') ?: publicSupabaseHost).toString()
+if (lurinBackendHost && !(lurinBackendHost ==~ /[a-z0-9-]+\.supabase\.co/)) {
+    throw new GradleException('LURIN_SUPABASE_HOST debe ser el dominio HTTPS de un solo proyecto independiente de Lurín')
+}
+
+android {
+    buildFeatures { buildConfig true }
+
+    namespace 'pe.lurin.comunidad'
+    compileSdk 36
+
+    defaultConfig {
+        applicationId 'pe.lurin.comunidad'
+        buildConfigField 'String', 'SUPABASE_HOST', '"' + lurinBackendHost + '"'
+        minSdk 26
+        targetSdk 35
+        versionCode 6
+        versionName '0.6.0-beta'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    buildTypes {
+        debug { debuggable true }
+        release {
+            minifyEnabled false
+            // Release publishing requires a separately managed signing key.
+        }
+    }
+    packaging {
+        resources { excludes += ['META-INF/LICENSE*', 'META-INF/NOTICE*'] }
+    }
+}
+
+dependencies {
+    // Local application origin without file://; required for DOM storage.
+    implementation 'androidx.webkit:webkit:1.18.0'
+}
